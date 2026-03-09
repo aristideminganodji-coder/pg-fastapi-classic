@@ -7,7 +7,6 @@ import bcrypt
 
 router=APIRouter(prefix="/auth",tags=["Authentication"])
 
-#pwd_context=CryptContext(schemes=["bcrypt"],deprecated="auto")
 #crypte le mot de passe lors du register
 def get_password_hash(password:str)->str:
     #hash du mot de passe avec bcrypt
@@ -32,7 +31,6 @@ def register(user:schemas.UserCreate,db:Session=Depends(get_db)):
         raise HTTPException(status_code=400,detail="Email already registered")
     
     #hasher le mot de passw
-    #hashed_password=pwd_context.hash(user.password)
     hashed_password=get_password_hash(user.password) 
 
     #creer l'utilisateur
@@ -42,3 +40,12 @@ def register(user:schemas.UserCreate,db:Session=Depends(get_db)):
     db.refresh(db_user)
 
     return db_user
+
+@router.post("/login-simple")
+def login_simple(user:schemas.UserCreate,db:Session=Depends(get_db)):
+    db_user=db.query(models.User).filter(models.User.email==user.email).first()
+
+    #verifier le mot de passe
+    if not db_user or verify_password(user.password,db_user.hashed_password):
+        raise HTTPException(status_code=401,detail="Email ou mot de passe incorrect")
+    return {"message":"connexion reussie","user_id":db_user.id}
