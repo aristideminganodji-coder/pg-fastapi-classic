@@ -46,6 +46,10 @@ def delete_user(user_id:int,db:Session=Depends(get_db)):
     user=db.query(models.User).filter(models.User.id==user_id).first()
     if not user:
         raise HTTPException(status_code=404,detail="User not found")
+
+    tasks_count=db.query(models.Task).filter(models.Task.user_id==user_id).count()
+    if tasks_count>0:
+        raise HTTPException(status_code=400,detail="Impossible de supprimer l'utilisateur car ce dernier a encore des tache")
     
     db.delete(user)
     db.commit()

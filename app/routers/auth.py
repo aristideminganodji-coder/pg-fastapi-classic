@@ -46,6 +46,6 @@ def login_simple(user:schemas.UserCreate,db:Session=Depends(get_db)):
     db_user=db.query(models.User).filter(models.User.email==user.email).first()
 
     #verifier le mot de passe
-    if not db_user or verify_password(user.password,db_user.hashed_password):
+    if not db_user or not verify_password(user.password,db_user.hashed_password):
         raise HTTPException(status_code=401,detail="Email ou mot de passe incorrect")
     return {"message":"connexion reussie","user_id":db_user.id}
