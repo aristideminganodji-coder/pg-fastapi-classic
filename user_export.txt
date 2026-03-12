@@ -1,6 +1,0 @@
- id |       email        |                       hashed_password                        | is_active 
-----+--------------------+--------------------------------------------------------------+-----------
-  2 | user_1@example.com | $2b$12$A2RG3PmE8kAuqTIhlZ84eed2i4Mre.2RLYBP3FogOe7fFtLVFUdG2 | t
-  3 | alice@test.com     | $2b$12$V19bAFO1ycnNTcrZ4H8NyeuBDXX.WHw0GOwFH7epLeybr1npbfa8u | t
-(2 rows)
-
